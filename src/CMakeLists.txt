@@ -24,35 +24,41 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 #   Matlab 
 #####################################################
 
-IF(WIN32)
-  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006a/extern/include )
-  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006b/extern/include )
-  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2007a/extern/include )
-  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2007b/extern/include )
-  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2008a/extern/include )
-  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2008b/extern/include )
-  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2009a/extern/include )
- 
-  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006a/extern/lib/win32/microsoft )
-  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006b/extern/lib/win32/microsoft )
-  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2007a/extern/lib/win32/microsoft )
-  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2007b/extern/lib/win32/microsoft )
-  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2008a/extern/lib/win32/microsoft )
-  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2008b/extern/lib/win32/microsoft )
-  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2009a/extern/lib/win32/microsoft )
+SET(MATLAB_ROOT /usr/local/MATLAB/R2013b)
+FIND_PACKAGE(Matlab REQUIRED)  
+INCLUDE_DIRECTORIES(${MATLAB_INCLUDE_DIRS})
 
-  SET(MATLAB_LIBRARIES libeng libmex libmx)
-ELSE(WIN32)
-   ## FindMatlab doesnt work for me
-#	SET(MATLAB_ROOT /usr/local/matlab/)
-#	FIND_PACKAGE(Matlab REQUIRED)  
+MESSAGE("M1 ${MATLAB_INCLUDE_DIRS}")
+MESSAGE("M2 ${MATLAB_INCLUDE_DIR}")
 
-  INCLUDE_DIRECTORIES(/usr/local/matlab/extern/include)
-  LINK_DIRECTORIES(/usr/local/matlab/bin/glnxa64)
+#SET(MATLAB_LIBRARIES mex mx mat)
 
-  SET(MATLAB_LIBRARIES mex mx mat)
-	
-ENDIF(WIN32)
+#IF(WIN32)
+#  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006a/extern/include )
+#  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006b/extern/include )
+#  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2007a/extern/include )
+#  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2007b/extern/include )
+#  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2008a/extern/include )
+#  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2008b/extern/include )
+#  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2009a/extern/include )
+# 
+#  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006a/extern/lib/win32/microsoft )
+#  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006b/extern/lib/win32/microsoft )
+#  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2007a/extern/lib/win32/microsoft )
+#  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2007b/extern/lib/win32/microsoft )
+#  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2008a/extern/lib/win32/microsoft )
+#  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2008b/extern/lib/win32/microsoft )
+#  LINK_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2009a/extern/lib/win32/microsoft )
+#
+#  SET(MATLAB_LIBRARIES libeng libmex libmx)
+#ELSE(WIN32)
+#
+#  INCLUDE_DIRECTORIES(/usr/local/matlab/extern/include)
+#  LINK_DIRECTORIES(/usr/local/matlab/bin/glnxa64)
+#
+#  SET(MATLAB_LIBRARIES mex mx mat)
+#
+#ENDIF(WIN32)
 
 #######################################################
 # libconfig++
