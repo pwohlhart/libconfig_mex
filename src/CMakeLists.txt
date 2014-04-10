@@ -24,15 +24,24 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 #   Matlab 
 #####################################################
 
-SET(MATLAB_ROOT /usr/local/MATLAB/R2013b)
+# set your MATLAB_ROOT here
+#   * either to $ENV{MATLAB_ROOT}
+#   * or directly
+#
+# If you dont set it, FindMatlab.cmake will search for the matlab binary
+#  which might be just fine, but might also fail or come up with the wrong one
+#  if you have more than one installed.
+# Also, I have no idea if the FindMatlab.cmake works on windows or mac (although it should).
+# Also, if the FindMatlab shipped with your installation of cmake works for you
+#  just delete the one in cmake/Modules/
+# 
+#SET(MATLAB_ROOT $ENV{MATLAB_ROOT})
+#SET(MATLAB_ROOT /usr/local/MATLAB/R2013b)
+
 FIND_PACKAGE(Matlab REQUIRED)  
 INCLUDE_DIRECTORIES(${MATLAB_INCLUDE_DIRS})
 
-MESSAGE("M1 ${MATLAB_INCLUDE_DIRS}")
-MESSAGE("M2 ${MATLAB_INCLUDE_DIR}")
-
-#SET(MATLAB_LIBRARIES mex mx mat)
-
+# OLD version without FindMatlab
 #IF(WIN32)
 #  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006a/extern/include )
 #  INCLUDE_DIRECTORIES( $ENV{ProgramFiles}/MATLAB/R2006b/extern/include )
