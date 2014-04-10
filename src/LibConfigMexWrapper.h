@@ -25,7 +25,8 @@ public:
 
 	void lookup(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]);
 	void exists(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]);
-	void isGroup(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]);
+  void isGroup(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]);
+  void isList(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]);
 	void getLength(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]);
 	void getSubSettingNameByIdx(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]);
 private:

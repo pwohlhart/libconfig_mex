@@ -7,7 +7,7 @@
 
 using namespace libconfig;
 
-enum CommandType {CMD_INVALID, CMD_OPEN, CMD_CLOSE, CMD_GET, CMD_EXISTS, CMD_ISGROUP, CMD_GETLENGTH, CMD_GETSUBSETTINGNAMEBYIDX };
+enum CommandType {CMD_INVALID, CMD_OPEN, CMD_CLOSE, CMD_GET, CMD_EXISTS, CMD_ISGROUP, CMD_GETLENGTH, CMD_GETSUBSETTINGNAMEBYIDX, CMD_ISLIST };
 
 
 bool getStringArgument(const mxArray *prhs[], int idx, std::string &argStr)
@@ -56,6 +56,8 @@ CommandType getCommand(const mxArray *prhs[])
         return CMD_EXISTS;
     if (commandStr.compare("isGroup") == 0)
         return CMD_ISGROUP;
+    if (commandStr.compare("isList") == 0)
+        return CMD_ISLIST;
     if (commandStr.compare("getLength") == 0)
         return CMD_GETLENGTH;
     if (commandStr.compare("getSubSettingNameByIdx") == 0)
@@ -130,7 +132,11 @@ void mexFunction(int nlhs, mxArray *plhs[], /* Output variables */
 		LibConfigMexWrapper *wrapper = LibConfigMexWrapper::retrieveAndCheckPtr(nrhs,prhs);
 		if (wrapper)
 			wrapper->isGroup(nlhs,plhs,nrhs,prhs);
-	} else if (command == CMD_GETLENGTH) {
+  } else if (command == CMD_ISLIST) {
+      LibConfigMexWrapper *wrapper = LibConfigMexWrapper::retrieveAndCheckPtr(nrhs,prhs);
+      if (wrapper)
+        wrapper->isList(nlhs,plhs,nrhs,prhs);
+  } else if (command == CMD_GETLENGTH) {
 		LibConfigMexWrapper *wrapper = LibConfigMexWrapper::retrieveAndCheckPtr(nrhs,prhs);
 		if (wrapper)
 			wrapper->getLength(nlhs,plhs,nrhs,prhs);

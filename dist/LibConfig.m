@@ -34,6 +34,8 @@ classdef LibConfig < handle
                     end
                     if (isGroup(obj,totalSubNodeName))
                         result.(subNodeName) = readNode(obj,totalSubNodeName);
+                    elseif (isList(obj,totalSubNodeName))
+                        result.(subNodeName) = getList(obj,totalSubNodeName);
                     else
                         result.(subNodeName) = get(obj,totalSubNodeName);
                     end
@@ -62,6 +64,13 @@ classdef LibConfig < handle
             end
         end
         
+        function val = isList(varargin)
+            obj = varargin{1};
+            if obj.pCppObj ~= 0
+                val = LibConfigMex('isList',obj.pCppObj,varargin{2});
+            end
+        end
+        
         function val = getLength(varargin)
             obj = varargin{1};
             if obj.pCppObj ~= 0
@@ -74,6 +83,23 @@ classdef LibConfig < handle
             if obj.pCppObj ~= 0
                 val = LibConfigMex('getSubSettingNameByIdx',obj.pCppObj,varargin{2},varargin{3});
             end
+        end
+        
+        function list = getList(varargin)
+          obj = varargin{1};
+          listPath = varargin{2};
+          Nl = getLength(obj,listPath);
+          list = cell(Nl,1);
+          for j=0:Nl-1
+              listItemPath = [listPath '.[' num2str(j) ']'];
+              if (isList(obj,listItemPath))
+                list{j+1} = getList(obj,listItemPath);
+              elseif (isGroup(obj,listItemPath))
+                list{j+1} = readNode(obj,listItemPath);
+              else
+                list{j+1} = get(obj,listItemPath);
+              end
+          end
         end
         
     end

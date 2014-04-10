@@ -162,7 +162,7 @@ void LibConfigMexWrapper::lookup(int nlhs, mxArray *plhs[], int nrhs, const mxAr
 				mexPrintf("'%s' is a group. nothing to return.\n",key.c_str());
 				break;
 
-			case Setting::TypeArray:
+      case Setting::TypeArray:
 				numElems = setting.getLength();
 				if (numElems > 0)
 				{
@@ -171,8 +171,8 @@ void LibConfigMexWrapper::lookup(int nlhs, mxArray *plhs[], int nrhs, const mxAr
 
 					switch (elemType)
 					{
-					case Setting::TypeInt:
-						plhs[0] = mxCreateNumericMatrix(1,1,mxINT32_CLASS,mxREAL);
+          case Setting::TypeInt:
+            plhs[0] = mxCreateNumericMatrix(1,numElems,mxINT32_CLASS,mxREAL);
 						valPtrInt = static_cast<int*>(mxGetData(plhs[0]));
 
 						for (int j = 0; j < numElems; ++j)
@@ -293,25 +293,61 @@ void LibConfigMexWrapper::isGroup(int nlhs, mxArray *plhs[], int nrhs, const mxA
 {
 	std::string key;
 	if (getStringArgument(prhs,2,key))
+  {
+    bool isGroup = false;
+    bool keyExists = _configFile.exists(key.c_str());
+    if (keyExists)
     {
-		bool isGroup = false;
-		bool keyExists = _configFile.exists(key.c_str());
-		if (keyExists)
-		{
-			Setting &setting = _configFile.lookup(key.c_str());
-			Setting::Type settingType = setting.getType();
-			isGroup = (settingType == Setting::TypeGroup);
-		}
+      Setting &setting = _configFile.lookup(key.c_str());
+      Setting::Type settingType = setting.getType();
+      isGroup = (settingType == Setting::TypeGroup);
+    }
 
-		plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL);
-		double *valPtrDbl = mxGetPr(plhs[0]);
-		if (isGroup)
-			*valPtrDbl = 1.0;
-		else
-			*valPtrDbl = 0.0;
-	}
-	else
-		mexErrMsgTxt("Second argument must be a string");	
+    plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL);
+    double *valPtrDbl = mxGetPr(plhs[0]);
+    if (isGroup)
+      *valPtrDbl = 1.0;
+    else
+      *valPtrDbl = 0.0;
+  }
+  else
+    mexErrMsgTxt("Second argument must be a string");
+}
+
+void LibConfigMexWrapper::isList(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
+{
+  std::string key;
+  if (getStringArgument(prhs,2,key))
+  {
+    bool isList = false;
+    bool keyExists = _configFile.exists(key.c_str());
+    if (keyExists)
+    {
+      Setting &setting = _configFile.lookup(key.c_str());
+      Setting::Type settingType = setting.getType();
+      isList = (settingType == Setting::TypeList);
+//      if (isList)
+//      {
+//        mexPrintf("Path of first child: %s\n",setting[0].getPath().c_str());
+//        mexPrintf("Name of first child: %s\n",setting[0].getName());
+//        try {
+//        Setting &test = _configFile.lookup(setting[0].getPath().c_str());
+//        mexPrintf("Setting found!\n");
+//        }catch(SettingNotFoundException &e){
+//          mexPrintf("Setting NOT found!\n");
+//        }
+//      }
+    }
+
+    plhs[0] = mxCreateDoubleMatrix(1,1,mxREAL);
+    double *valPtrDbl = mxGetPr(plhs[0]);
+    if (isList)
+      *valPtrDbl = 1.0;
+    else
+      *valPtrDbl = 0.0;
+  }
+  else
+    mexErrMsgTxt("Second argument must be a string");
 }
 
 void LibConfigMexWrapper::getLength(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
